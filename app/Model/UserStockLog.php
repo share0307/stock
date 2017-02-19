@@ -44,6 +44,33 @@ class UserStockLog extends Model
     }
     
     /**
+     * 开始时间查询
+     * @author  jianwei
+     */
+    public function scopeStartTimeQuery($query, $start_time)
+    {
+        return $query->where('last_update_time','>=',$start_time);
+    }
+    
+    /**
+     * 技术时间查询
+     * @author  jianwei
+     */
+    public function scopeEndTimeQuery($query, $end_time)
+    {
+        return $query->where('last_update_time','<=',$end_time);
+    }
+    
+    /**
+     * 状态完结
+     * @author  jianwei
+     */
+    public function scopeSuccessstatusQuery($query)
+    {
+        return $query->where('status', config('stockdb.user_stock_log.status.success_key.code'));
+    }
+    
+    /**
      * 判断是否买入
      * @author  jianwei
      */
@@ -61,5 +88,23 @@ class UserStockLog extends Model
         return $this->type == config('stockdb.user_stock_log.type.out_key.code');
     }
     
+    
+    /**
+     * 判断是否已经成功
+     * @author  jianwei
+     */
+    public function checkSuccessStatus()
+    {
+        return $this->status == config('stockdb.user_stock_log.status.success_key.code');
+    }
+    
+    /**
+     * 检查是否已经完结
+     * @author  jianwei
+     */
+    public function checkIsFinish()
+    {
+        return $this->is_finish == config('stockdb.user_stock_log.is_finish.yes_key.code');
+    }
     
 }

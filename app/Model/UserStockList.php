@@ -43,5 +43,32 @@ class UserStockList extends Model
         return $query->where('stock_code', $stock_code);
     }
     
+    /**
+     * 开始时间查询
+     * @author  jianwei
+     */
+    public function scopeStartTimeQuery($query, $start_time)
+    {
+        return $query->where('last_update_time','>=',$start_time);
+    }
+    
+    /**
+     * 技术时间查询
+     * @author  jianwei
+     */
+    public function scopeEndTimeQuery($query, $end_time)
+    {
+        return $query->where('last_update_time','<=',$end_time);
+    }
+    
+    
+    /**
+     * 判断是否有足够的股票
+     * @author  jianwei
+     */
+    public function checkStockQuantity($stock_quantity)
+    {
+        return $this->quantity >= $stock_quantity;
+    }
     
 }

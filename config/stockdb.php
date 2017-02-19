@@ -35,5 +35,15 @@ return array(
                 'msg'   =>  '卖出'
             ]
         ],
+        'is_finish' =>  [
+            'yes_key'   =>  [
+                'code'  =>  1,
+                'msg'   =>  '完结'
+            ],
+            'not_key'   =>  [
+                'code'  =>  0,
+                'msg'   =>  '未完结'
+            ]
+        ]
     ],
 );
