@@ -109,7 +109,7 @@ class IndexController extends Controller
         }
     
         $response = array();
-        if('out' == $type) {
+        if(config('site.stock.type.stock_out') == $type) {
             $response = Stock::SellStockCalculateByNumber($stock_code, $buy_number, $stock_price);
         }else{
             $response = Stock::BuyStockCalculateByNumber($stock_code, $buy_number, $stock_price);
@@ -130,7 +130,7 @@ class IndexController extends Controller
      * 股票买入
      * @author  jianwei
      */
-    public function buyStock(Request $request, SimulatedStockBusiness $simulated_stock_business)
+    public function handleStock(Request $request, SimulatedStockBusiness $simulated_stock_business)
     {
         //用户id
         $user_id = 999;
@@ -147,8 +147,9 @@ class IndexController extends Controller
         //股票价格
         $stock_price = $request->stock_price;
         
+        
         //操作股票
-        $handle_response = $simulated_stock_business->userHandleStock($user_id);
+        $handle_response = $simulated_stock_business->userHandleStock($user_id,$stock_code,$quantity,$stock_price,$type);
         
         return $this->jsonFormat($handle_response);
     }

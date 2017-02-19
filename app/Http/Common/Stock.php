@@ -36,7 +36,7 @@ class Stock
         }
         
         //以总金额来算看需要交多少税以及佣金等
-        $stock_charge_value = self::CalculateStockChargeValue($stock, $buy_price, 'in');
+        $stock_charge_value = self::CalculateStockChargeValue($stock, $buy_price, config('site.stock.type.stock_in'));
         
         //总成本
         $charge_total_value = $stock_charge_value['commission_money'] + $stock_charge_value['stamp_duty_money'] + $stock_charge_value['transfer_fee_money'];
@@ -52,7 +52,7 @@ class Stock
         $final_buy_money = Helper::sprint2f($final_buy_money);
         
         //重新计算需要交多少税以及佣金等
-        $final_stock_charge_value =  self::CalculateStockChargeValue($stock, $final_buy_money, 'in');
+        $final_stock_charge_value =  self::CalculateStockChargeValue($stock, $final_buy_money, config('site.stock.type.stock_in'));
     
         //总成本
         $final_charge_total_value = $final_stock_charge_value['commission_money'] + $final_stock_charge_value['stamp_duty_money'] + $final_stock_charge_value['transfer_fee_money'];
@@ -85,6 +85,7 @@ class Stock
             throw new JsonException(10000);
         }
         
+        
         //过滤一下购买数量
         $buy_stock_quantity = self::FixedStockBuyNumber($buy_number);
         
@@ -93,7 +94,7 @@ class Stock
         $final_buy_money = Helper::sprint2f($final_buy_money);
         
         //重新计算需要交多少税以及佣金等
-        $final_stock_charge_value =  self::CalculateStockChargeValue($stock, $final_buy_money, 'in');
+        $final_stock_charge_value =  self::CalculateStockChargeValue($stock, $final_buy_money, config('site.stock.type.stock_in'));
     
         //总成本
         $final_charge_total_value = $final_stock_charge_value['commission_money'] + $final_stock_charge_value['stamp_duty_money'] + $final_stock_charge_value['transfer_fee_money'];
@@ -136,7 +137,7 @@ class Stock
         $final_buy_money = Helper::sprint2f($final_buy_money);
         
         //重新计算需要交多少税以及佣金等
-        $final_stock_charge_value =  self::CalculateStockChargeValue($stock, $final_buy_money, 'out');
+        $final_stock_charge_value =  self::CalculateStockChargeValue($stock, $final_buy_money, config('site.stock.type.stock_out'));
         
         //总成本
         $final_charge_total_value = $final_stock_charge_value['commission_money'] + $final_stock_charge_value['stamp_duty_money'] + $final_stock_charge_value['transfer_fee_money'];
@@ -191,7 +192,7 @@ class Stock
      */
     public static function CalculateStockChargeValue($stock, $buy_price, $type)
     {
-        $allow_type = array('in', 'out');
+        $allow_type = array(config('site.stock.type.stock_in'), config('site.stock.type.stock_out'));
         
         if (!is_numeric($buy_price) || $buy_price <= 0 || !in_array($type, $allow_type)) {
             throw new JsonException(10000);
@@ -207,7 +208,7 @@ class Stock
         
         //印花税，印花税收卖出时收取的
         $stamp_duty_money = 0;
-        if ('out' == $type) {
+        if (config('site.stock.type.stock_out') == $type) {
             $stamp_duty_money = self::CalculateStockStampDuty($buy_price);
         }
         $stamp_duty_money = Helper::sprint2f($stamp_duty_money);
@@ -232,7 +233,7 @@ class Stock
      */
     public static function CalculateStockTransferFee($stock_code, $buy_price, $type)
     {
-        $allow_type = ['in','out'];
+        $allow_type = [config('site.stock.type.stock_in'),config('site.stock.type.stock_out')];
         
         if (!is_numeric($buy_price) || $buy_price <= 0 || !in_array($type, $allow_type)) {
             throw new JsonException(10000);
@@ -243,10 +244,10 @@ class Stock
     
         $transfer_fee_money = 0;
         if($stock_plate_config['code'] == config('stock.plate.shzb_key.code')){
-            if('in' == $type) {
+            if(config('site.stock.type.stock_in') == $type) {
                 //计算过户费
                 $transfer_fee_money = $buy_price * $stock_plate_config['transfer_fee'];
-            }else if('out' == $type){
+            }else if(config('site.stock.type.stock_out') == $type){
                 $transfer_fee_money = $buy_price * $stock_plate_config['transfer_fee'];
             }
         }

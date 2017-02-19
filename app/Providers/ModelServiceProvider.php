@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Model\UserStockAccount;
+use App\Model\UserStockList;
+use App\Model\UserStockLog;
 use Illuminate\Support\ServiceProvider;
 
 class ModelServiceProvider extends ServiceProvider
@@ -30,6 +32,11 @@ class ModelServiceProvider extends ServiceProvider
     {
         //用户股票账户
         $this->app->bind('UserStockAccountModel',UserStockAccount::class);
+        //用户所拥有的股票课表
+        $this->app->bind('UserStockListModel',UserStockList::class);
+        //用户操作股票记录
+        $this->app->bind('UserStockLogModel',UserStockLog::class);
+        
     }
     
     
@@ -41,7 +48,7 @@ class ModelServiceProvider extends ServiceProvider
     {
         $provides_arr = array();
         $provides_arr[] = 'UserStockAccountModel';
-        
+        $provides_arr[] = 'UserStockListModel';
         return $provides_arr;
     }
     

@@ -24,5 +24,14 @@ class UserStockAccount extends Model
     protected $table = 'stk_user_stock_account';
     
     
+    /**
+     * 通过用户 id 查询
+     * @author  jianwei
+     */
+    public function scopeUserIdQuery($query, $user_id)
+    {
+        return $query->where('user_id',$user_id);
+    }
+    
     
 }

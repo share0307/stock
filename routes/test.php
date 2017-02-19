@@ -22,6 +22,8 @@ Route::any('/stock/calculate-cost','IndexController@calculateCost');
 
 //股票买卖操作
 Route::any('/stock/show-handle','IndexController@showHanlePage');
+//操作股票
+Route::any('/stock/handle-stock','IndexController@handleStock');
 
 
 Route::resource('/stock','IndexController');
